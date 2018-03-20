@@ -67,7 +67,7 @@ public class RSApplication extends Application {
 //                getString(R.string.ohmage_queue_directory)
 //        );
 
-        String testDirectory = "/Documents/";
+        String testDirectory = "/";
         URI directoryURI = null;
         try {
             directoryURI = new URI(testDirectory);
