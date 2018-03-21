@@ -11,7 +11,7 @@ import android.view.View;
 import org.researchsuite.pamdemo.studyManagement.RSActivity;
 import org.researchsuite.pamdemo.studyManagement.RSActivityManager;
 
-public class MainActivity  extends RSActivity {
+public class MainActivity extends RSActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
