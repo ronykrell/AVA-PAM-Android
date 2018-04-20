@@ -4,42 +4,28 @@ import org.apache.commons.lang3.StringUtils;
 import org.researchsuite.rsrp.CSVBackend.CSVEncodable;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
 /**
- * Created by christinatsangouri on 3/7/18.
+ * Created by christinatsangouri on 4/20/18.
  */
 
-public class PAMCSVEncodable extends PAMRaw implements CSVEncodable {
+public class DemographicsCSVEncodable extends DemographicsResult implements CSVEncodable {
 
-    public static String TYPE = "PAMCSVEncodable";
+    public static String TYPE = "DemographicsCSVEncodable";
 
-
-    public PAMCSVEncodable(UUID uuid, String taskIdentifier, UUID taskRunUUID, Map<String, Serializable> choice) {
-        super(uuid, taskIdentifier, taskRunUUID, choice);
+    public DemographicsCSVEncodable(UUID uuid, String taskIdentifier, UUID taskRunUUID, String icecream, String food) {
+        super(uuid, taskIdentifier, taskRunUUID, icecream, food);
     }
 
     @Override
     public String[] toRecords() {
-        Collection resultMapValuesCollection = this.getPamChoice().values();
-        String[] resultMapValues = Arrays.copyOf(resultMapValuesCollection.toArray(), resultMapValuesCollection.toArray().length, String[].class);
 
-        StringBuilder recordBuilder = new StringBuilder();
-
-        for (String result:resultMapValues){
-            recordBuilder.append(result);
-            recordBuilder.append(",");
-        }
-
-
-        String record = recordBuilder.toString();
-        String completeRecord = getTimestamp() + "," + record;
-        String[] completeRecordArray = new String[]{completeRecord};
+        String record = getTimestamp() + "," + this.getIcecream() + "," + this.getFood();
+        String[] completeRecordArray = new String[]{record};
 
         return completeRecordArray;
     }
@@ -51,9 +37,9 @@ public class PAMCSVEncodable extends PAMRaw implements CSVEncodable {
 
     @Override
     public String getHeader() {
-        String[] pamHeader = new String[]{"timestamp","affect_arousal","affect_valence","positive_affect","mood","negative_affect"};
-        String pamHeaderJoined = StringUtils.join(pamHeader,",");
-        return pamHeaderJoined;
+        String[] header = new String[]{"timestamp","icecream","food"};
+        String headerJoined = StringUtils.join(header,",");
+        return headerJoined;
     }
 
     private String getTimestamp () {

@@ -1,0 +1,57 @@
+{
+  "type": "recurring",
+  "identifier": "Demographics",
+  "title": "Sample Title",
+  "guid": "sample-1",
+  "activity": {
+    "type"      : "elementList",
+    "identifier": "sample_list",
+    "elements"   : [
+      {
+        "identifier": "icecream",
+        "type": "singleChoiceText",
+        "text": "What ice cream do you like?",
+        "items": [
+          {
+            "prompt": "Vanilla",
+            "value": "vanilla"
+          },
+          {
+            "prompt": "Chocolate",
+            "value": "chocolate"
+          }
+        ]
+      },
+      {
+        "identifier": "food",
+        "type": "textfield",
+        "text": "What did you eat today?"
+      }
+
+
+    ]
+  },
+  "resultTransforms":[
+    {
+      "transform": "DemographicsCSVEncodable",
+      "inputMapping":[
+        {
+          "stepIdentifier":"icecream",
+          "parameter":"icecream"
+        },
+        {
+          "stepIdentifier":"food",
+          "parameter":"food"
+        },
+        {"parameter": "schemaID", "constant":{
+          "namespace": "Cornell",
+          "name": "cornell",
+          "version": "1.0"
+        }
+        }
+      ]
+    }
+
+  ]
+
+}
