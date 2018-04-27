@@ -3,28 +3,36 @@ package org.researchsuite.pamdemo.RSRPBackendSupport;
 import org.apache.commons.lang3.StringUtils;
 import org.researchsuite.rsrp.CSVBackend.CSVEncodable;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
 
 /**
- * Created by christinatsangouri on 4/20/18.
+ * Created by christinatsangouri on 4/27/18.
  */
 
-public class DemographicsCSVEncodable extends DemographicsResult implements CSVEncodable {
+public class BeehiveCSVEncodable extends BeehiveResult implements CSVEncodable {
 
-    public static String TYPE = "DemographicsCSVEncodable";
+    public static String TYPE = "BeehiveCSVEncodable";
 
-    public DemographicsCSVEncodable(UUID uuid, String taskIdentifier, UUID taskRunUUID, String icecream, String food) {
-        super(uuid, taskIdentifier, taskRunUUID, icecream, food);
+    public BeehiveCSVEncodable(UUID uuid, String taskIdentifier, UUID taskRunUUID, Object demographyResults[], String headerValues[]) {
+        super(uuid, taskIdentifier, taskRunUUID, demographyResults, headerValues);
     }
 
     @Override
     public String[] toRecords() {
 
-        String record = getTimestamp() + "," + this.getIcecream() + "," + this.getFood();
+        Object[] results = this.getDemographyResults();
+        StringBuilder resultBuilder = new StringBuilder();
+        resultBuilder.append(getTimestamp());
+        resultBuilder.append(",");
+
+        for (Object result : results) {
+            resultBuilder.append(String.valueOf(result));
+            resultBuilder.append(",");
+        }
+
+        String record = resultBuilder.toString();
         String[] completeRecordArray = new String[]{record};
 
         return completeRecordArray;
@@ -37,12 +45,14 @@ public class DemographicsCSVEncodable extends DemographicsResult implements CSVE
 
     @Override
     public String getHeader() {
-        String[] header = new String[]{"timestamp","icecream","food"};
-        String headerJoined = StringUtils.join(header,",");
+
+        String[] header = this.getHeaderValues();
+
+        String headerJoined = StringUtils.join(header, ",");
         return headerJoined;
     }
 
-    private String getTimestamp () {
+    private String getTimestamp() {
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
@@ -71,4 +81,5 @@ public class DemographicsCSVEncodable extends DemographicsResult implements CSVE
 
         return timestamp;
     }
+
 }

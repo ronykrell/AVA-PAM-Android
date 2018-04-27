@@ -20,7 +20,12 @@ public class MainActivity extends RSActivity {
 
         if (isReadStoragePermissionGranted() && isWriteStoragePermissionGranted()) {
             RSActivityManager.get().queueActivity(this, "RSpam", true);
-            RSActivityManager.get().queueActivity(this, "demographics", true);
+            RSActivityManager.get().queueActivity(this, "demography", true);
+            RSActivityManager.get().queueActivity(this, "planner", true);
+            RSActivityManager.get().queueActivity(this, "productivity", true);
+
+
+
         }
     }
 

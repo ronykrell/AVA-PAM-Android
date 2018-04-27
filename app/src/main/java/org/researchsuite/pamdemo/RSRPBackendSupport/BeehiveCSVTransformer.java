@@ -6,15 +6,17 @@ import org.researchstack.backbone.result.StepResult;
 import org.researchsuite.rsrp.Core.RSRPFrontEndServiceProvider.spi.RSRPFrontEnd;
 import org.researchsuite.rsrp.Core.RSRPIntermediateResult;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Created by christinatsangouri on 4/20/18.
+ * Created by christinatsangouri on 4/27/18.
  */
 
-public class DemographicsCSVTransformer implements RSRPFrontEnd {
+public class BeehiveCSVTransformer implements RSRPFrontEnd {
 
     @Nullable
     public <T> T extractResult(Map<String, Object> parameters, String identifier) {
@@ -32,19 +34,35 @@ public class DemographicsCSVTransformer implements RSRPFrontEnd {
     @Nullable
     @Override
     public RSRPIntermediateResult transform(String taskIdentifier, UUID taskRunUUID, Map<String, Object> parameters) {
-        String icecream = extractResult(parameters,"icecream");
-        String food = extractResult(parameters,"food");
+
+        ArrayList<Object> results = new ArrayList<>();
+        ArrayList<String> keys = new ArrayList<>();
+        keys.add("timestamp");
+
+        for (String key : parameters.keySet()) {
+            if (!Objects.equals(key, "schemaID")){
+                results.add(extractResult(parameters,key));
+                keys.add(key);
+            }
+
+        }
 
 
-        DemographicsCSVEncodable result = new DemographicsCSVEncodable(
+
+        Object[] demographyResults = results.toArray();
+        String[] headerValues = keys.toArray(new String[0]);
+
+
+
+        BeehiveCSVEncodable result = new BeehiveCSVEncodable(
                 UUID.randomUUID(),
                 taskIdentifier,
                 taskRunUUID,
-                icecream,
-                food
+                demographyResults,
+                headerValues
         );
 
-        StepResult firstStepResult = (StepResult) (parameters.get("icecream") != null ? parameters.get("icecream") : parameters.get("food"));
+        StepResult firstStepResult = (StepResult) (parameters.get("demography1") != null ? parameters.get("demography1") : parameters.get("demography1"));
 
         if (firstStepResult != null) {
             result.setStartDate(firstStepResult.getStartDate());
@@ -65,7 +83,7 @@ public class DemographicsCSVTransformer implements RSRPFrontEnd {
 
     @Override
     public boolean supportsType(String type) {
-        if (type.equals(org.researchsuite.pamdemo.RSRPBackendSupport.DemographicsCSVEncodable.TYPE)) return true;
+        if (type.equals(org.researchsuite.pamdemo.RSRPBackendSupport.BeehiveCSVEncodable.TYPE)) return true;
         else return false;
     }
 }
